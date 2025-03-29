@@ -31,5 +31,5 @@ This is a **Streamlit-based web application** that provides two main functionali
 
 1. Clone the repository:
    ```bash
-   git clone https://github.com/your-repo/password-checker-generator.git
+   git clone [https://github.com/your-repo/password-checker-generator.git](https://github.com/daniyalquest/password-strength-meter.git)
    cd password-checker-generator
