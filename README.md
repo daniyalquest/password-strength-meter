@@ -1,53 +1,35 @@
-# 🔐 Password Strength Meter
+# 🔒 Password Strength Checker & Generator
 
-## 📌 Overview
-This is a **Password Strength Meter** built using Python. It evaluates a password based on key security criteria and provides feedback to help users create stronger passwords.
+This is a **Streamlit-based web application** that provides two main functionalities: checking the strength of a password and generating secure passwords. It is designed to help users create and evaluate strong passwords to enhance their online security.
+
+---
 
 ## 🚀 Features
-✅ Checks password strength based on:
-- **Length** (minimum 8 characters)
-- **Uppercase & lowercase letters**
-- **At least one digit (0-9)**
-- **At least one special character** (!@#$%^&*)
 
-✅ **Rejects common weak passwords**  
-✅ **Provides feedback & improvement suggestions**  
-✅ **Generates a strong password if the input is weak**  
+### 1. Password Strength Checker
+- Evaluates the strength of a password based on the following criteria:
+  - Minimum length of 8 characters.
+  - Contains both uppercase and lowercase letters.
+  - Includes at least one numeric digit (0-9).
+  - Contains at least one special character (`!@#$%^&*`).
+- Provides feedback messages:
+  - **Error**: For missing criteria.
+  - **Warning**: For moderate passwords.
+  - **Success**: For strong passwords.
 
-## 🛠️ Installation
-### **1. Clone the Repository**
-```bash
-git clone https://github.com/daniyalquest/password-strength-meter.git
-cd password-strength-meter
-```
+### 2. Password Generator
+- Generates strong, random passwords with:
+  - At least one uppercase letter.
+  - At least one lowercase letter.
+  - At least one digit.
+  - At least one special character.
+- Allows users to customize the password length (minimum 8 characters, maximum 32 characters).
 
-### **2. Install Dependencies**
-```bash
-pip install -r requirements.txt
-```
+---
 
-### **3. Run the Program**
-```bash
-python app.py
-```
+## 🛠️ How to Run
 
-## 📜 Usage
-- Run the script and enter a password when prompted.
-- The program evaluates the strength and gives feedback.
-- If the password is weak, it suggests a strong alternative.
-
-Example:
-```bash
-Enter your password: Hello123
-⚠️ Moderate Password - Consider adding the following security features:
-   - Include at least one special character (!@#$%^&*).
-```
-
-## 🔧 Future Enhancements
-- **GUI Version** using Streamlit  
-- **Custom Scoring Weights**  
-- **Integration with a Web Application**  
-
-## 👨‍💻 Author
-Developed by **Muhammad Daniyal Ashfaq**  
-📧 Contact: [daniyal2472@gmail.com](mailto:daniyal2472@gmail.com)
+1. Clone the repository:
+   ```bash
+   git clone https://github.com/your-repo/password-checker-generator.git
+   cd password-checker-generator

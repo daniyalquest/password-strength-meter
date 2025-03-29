@@ -1,72 +1,85 @@
+import streamlit as st
 import re
 import random
 import string
-import streamlit as st
-
-COMMON_PASSWORDS = {
-    "password", "123456", "password123", "qwerty", "admin", "letmein", "12345678", "abc123"
-}
-
-def generate_strong_password(length=12):
-    if length < 8:
-        length = 8
-
-    upper = random.choice(string.ascii_uppercase)
-    lower = random.choice(string.ascii_lowercase)
-    digit = random.choice(string.digits)
-    special = random.choice("!@#$%^&*")
-
-    remaining_length = length - 4
-    all_chars = string.ascii_letters + string.digits + "!@#$%^&*"
-    rest = [random.choice(all_chars) for _ in range(remaining_length)]
-
-    password_list = list(upper + lower + digit + special + "".join(rest))
-    random.shuffle(password_list)
-    return "".join(password_list)
 
 def check_password_strength(password):
+    messages = []
     score = 0
-    feedback = []
-
-    if password.lower() in COMMON_PASSWORDS:
-        st.error("❌ This password is too common and insecure. Please choose a more unique password.")
-        return
 
     if len(password) >= 8:
         score += 1
     else:
-        feedback.append("Password should be at least 8 characters long.")
-
-    if re.search(r"[A-Z]", password) and re.search(r"[a-z]", password):
+        messages.append(("error", "❌ Password should be at least 8 characters long."))
+    
+    if re.search(r'[A-Z]', password) and re.search(r'[a-z]', password):
         score += 1
     else:
-        feedback.append("Include both uppercase and lowercase letters.")
-
-    if re.search(r"\d", password):
+        messages.append(("error", "❌ Include both uppercase and lowercase letters."))
+    
+    if re.search(r'\d', password):
         score += 1
     else:
-        feedback.append("Add at least one number (0-9).")
-
-    if re.search(r"[!@#$%^&*]", password):
+        messages.append(("error", "❌ Add at least one number (0-9)."))
+    
+    if re.search(r'[!@#$%^&*]', password):
         score += 1
     else:
-        feedback.append("Include at least one special character (!@#$%^&*).")
-
+        messages.append(("error", "❌ Include at least one special character (!@#$%^&*)."))
+    
     if score == 4:
-        st.success("✅ Strong Password!")
+        messages.append(("success", "✅ Strong Password!"))
     elif score == 3:
-        st.warning("⚠️ Moderate Password - Consider adding the following security features:")
-        for f in feedback:
-            st.write("   -", f)
+        messages.append(("warning", "⚠️ Moderate Password - Consider adding more security features."))
     else:
-        st.error("❌ Weak Password - Please improve it by:")
-        for f in feedback:
-            st.write("   -", f)
-        suggestion = generate_strong_password()
-        st.info("💡 Consider using a strong password like: " + suggestion)
+        messages.append(("error", "❌ Weak Password - Improve it using the suggestions above."))
+    
+    return messages
 
-if __name__ == "__main__":
-    st.title("Password Strength Meter")
-    password = st.text_input("Enter your password:", type="password")
-    if st.button("Check Password Strength"):
-        check_password_strength(password)
+def generate_password(length=8):
+    uppercase = random.choices(string.ascii_uppercase, k=1)
+    lowercase = random.choices(string.ascii_lowercase, k=1)
+    digits = random.choices(string.digits, k=1)
+    special = random.choices("!@#$%^&*", k=1)
+    all_chars = string.ascii_letters + string.digits + "!@#$%^&*"
+    remaining_length = length - 4
+    remaining = random.choices(all_chars, k=remaining_length) if remaining_length > 0 else []
+    password_chars = uppercase + lowercase + digits + special + remaining
+    random.shuffle(password_chars)
+    return ''.join(password_chars)
+
+st.title("🔒 Password Strength Checker & Generator")
+
+option = st.radio(
+    "Choose an option:", 
+    ("Check Password Strength", "Generate Password"),
+    horizontal=True
+)
+
+if option == "Check Password Strength":
+    password = st.text_input("Enter password:")
+    if st.button("Check Strength"):
+        feedback = check_password_strength(password)
+        for msg_type, msg in feedback:
+            if msg_type == "error":
+                st.error(msg)
+            elif msg_type == "warning":
+                st.warning(msg)
+            elif msg_type == "success":
+                st.success(msg)
+
+else:
+    col1, col2 = st.columns([2, 1])
+    with col1:
+        length = st.slider(
+            "Password length:", 
+            min_value=8, 
+            max_value=32, 
+            value=12,
+            help="Minimum length is 8 characters"
+        )
+    
+    password = generate_password(length)
+    st.subheader("Your Secure Password:")
+    st.code(password, language="text")
+    st.write("Click the code above to copy, then paste where needed!")
